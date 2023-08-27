@@ -1,28 +1,46 @@
 import {useState} from "react";
 
-const AgendaAdd=()=>{
-     const [title, setTitle] = useState("")
+const AgendaAdd = () => {
+    // data handler states
+    const [title, setTitle] = useState("")
     const [desc, setDesc] = useState("")
     const [topic, setTopic] = useState("")
     const [toppicArray, setToppicArray] = useState([])
 
-
+    //error handlers state
     const [titleError, setTitleError] = useState(false)
     const [descError, setDescError] = useState(false)
     const [topicError, setTopicError] = useState(false)
 
+    //btn disable handler states
+
 
     // functions to handler error handler on focus lost
+    const [btnDisable, setBtnDisable] = useState(true)
+    const btnDisableChangeHandler = () => {
+
+        if (title.length > 0 && desc.length > 0 && topic.length > 0) {
+            setBtnDisable(false)
+        } else {
+            setBtnDisable(true)
+        }
+    }
     const titleErrorFocusHandler = () => {
+        btnDisableChangeHandler()
+
         console.log("i called")
         console.log(title.length)
         if (title.length === 0) {
             setTitleError(true)
-        } else if(title.length>0)
+        } else if (title.length > 0)
             setTitleError(false)
 
     }
+
+
     const descErrorFocusHandler = () => {
+        btnDisableChangeHandler()
+
         if (desc.length === 0) {
             setDescError(true)
         } else
@@ -30,6 +48,8 @@ const AgendaAdd=()=>{
 
     }
     const topicErrorFocusHandler = () => {
+        btnDisableChangeHandler()
+
         if (topic.length === 0) {
             setTopicError(true)
         } else
@@ -40,13 +60,16 @@ const AgendaAdd=()=>{
     // functions to get datas from input fields
 
     const titleChangeHandler = e => {
+        btnDisableChangeHandler()
         setTitle(e.target.value);
     }
     const descChangeHandler = e => {
+        btnDisableChangeHandler()
         setDesc(e.target.value)
     }
 
     const topicChangeHandler = (e) => {
+        btnDisableChangeHandler()
         setTopic(e.target.value)
     }
 
@@ -59,55 +82,61 @@ const AgendaAdd=()=>{
         })
     }
 
-    let listElemets = toppicArray.map(topic=> (<li key={Math.random()} className={"list-group-item"}>{topic}</li>))
-   
-    return (<div className={"container mt-4"}>
-        <form className={"form-control"}>
-            <label htmlFor="title" className={"form-label mt-2"}>Title</label>
-            <input type="text" placeholder={"Enter Title"} required={true} id={"title"} className={"form-control"}
-                   onChange={titleChangeHandler} onBlur={titleErrorFocusHandler}/>
-            {
-                titleError &&  (
-                    <div>
-                        <code color={"red"}> Title filed cant be empty</code><br/>
-                    </div>
-                )
-            }
+    let listElemets = toppicArray.map(topic => (<li key={Math.random()} className={"list-group-item"}>{topic}</li>))
+
+    return (
+        <div className={"container mt-4"}>
+            <form className={"form-control"}>
+                <label htmlFor="title" className={"form-label mt-2"}>Title</label>
+                <input type="text" placeholder={"Enter Title"} required={true} id={"title"} className={"form-control"}
+                       onChange={titleChangeHandler} onBlur={titleErrorFocusHandler}/>
+                {
+                    titleError && (
+                        <div>
+                            <code color={"red"}> Title filed cant be empty</code><br/>
+                        </div>
+                    )
+                }
 
 
+                <label htmlFor="desc" className={"form-label mt-2"}>Description</label>
+                <input type="text" placeholder={"Enter Description"} required={true} id={"desc"}
+                       className={"form-control"} onChange={descChangeHandler} onBlur={descErrorFocusHandler}/>
 
-            <label htmlFor="desc" className={"form-label mt-2"}>Description</label>
-            <input type="text" placeholder={"Enter Description"} required={true} id={"desc"}
-                   className={"form-control"} onChange={descChangeHandler} onBlur={descErrorFocusHandler}/>
+                {
+                    descError && (
+                        <div>
+                            <code color={"red"}> Description cant be empty</code><br/>
+                        </div>
+                    )
+                }
+                <label htmlFor="Topic" className={"form-label mt-2"}>Topic</label>
+                <div className="input-group mb-3">
+                    <input type="text" placeholder={"Enter Topics"} required={true} id={"Topic"}
+                           className={"form-control"} onChange={topicChangeHandler} onBlur={topicErrorFocusHandler}/>
 
-              {
-                descError &&  (
-                    <div>
-                        <code color={"red"}> Description  cant be empty</code><br/>
-                    </div>
-                )
-            }
+                    <button className={"btn  btn-primary  "} onClick={addTopicHandler}
+                            disabled={btnDisable} type={"button"} id="button-addon1">Add topic
+                    </button>
+                </div>
 
-            <label htmlFor="Topic" className={"form-label mt-2"}>Topic</label>
-            <input type="text" placeholder={"Enter Topics"} required={true} id={"Topic"}
-                   className={"form-control"} onChange={topicChangeHandler} onBlur={topicErrorFocusHandler}/>
+                {
+                    topicError && (
+                        <div>
+                            <code color={"red"}> Add atleast one topic !</code><br/>
+                        </div>
+                    )
+                }
 
-              {
-                topicError &&  (
-                    <div>
-                        <code color={"red"}> Add atleast one topic !</code><br/>
-                    </div>
-                )
-            }
 
-            <button className={"btn  btn-primary mt-2"} onClick={addTopicHandler} disabled={topicError}>Add topic</button>
-            <ul className="list-group mt-2">
-                {listElemets}
-            </ul>
+                <ul className="list-group mt-2">
+                    {listElemets}
+                </ul>
 
-            <button className={"btn  btn-success mt-2"}>Submit</button>
-        </form>
-    </div>);
+                <button className={"btn  btn-success mt-2"} disabled={btnDisable}>Submit</button>
+            </form>
+        </div>
+    );
 
 }
 export default AgendaAdd;
