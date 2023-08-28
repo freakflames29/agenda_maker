@@ -19,7 +19,7 @@ const AgendaAdd = (props) => {
     const [btnDisable, setBtnDisable] = useState(true)
     const btnDisableChangeHandler = () => {
 
-        if (title.length > 0 && desc.length > 0 && (topic.length > 0 || toppicArray.length >0)) {
+        if (title.length > 0 && desc.length > 0 && (topic.length > 0 || toppicArray.length > 0)) {
             setBtnDisable(false)
         } else {
             setBtnDisable(true)
@@ -51,7 +51,7 @@ const AgendaAdd = (props) => {
         btnDisableChangeHandler()
 
 
-        if (topic.length === 0 && toppicArray.length ===0) {
+        if (topic.length === 0 && toppicArray.length === 0) {
             setTopicError(true)
         } else
             setTopicError(false)
@@ -83,24 +83,28 @@ const AgendaAdd = (props) => {
         })
     }
 
-    const submitHandler=(e)=>{
+    const submitHandler = (e) => {
         e.preventDefault()
-        const gatheredData={
-            title:title,
-            desc:desc,
-            topics:toppicArray
+        const gatheredData = {
+            title: title,
+            desc: desc,
+            topics: toppicArray
         }
         props.onSubmitData(gatheredData)
+        setTitle("")
+        setDesc("")
+        setTopic("")
+        setToppicArray([])
     }
 
-    let listElemets = toppicArray.map((topic,index) => (<li key={index} className={"list-group-item"}>{topic}</li>))
+    let listElemets = toppicArray.map((topic, index) => (<li key={index} className={"list-group-item"}>{topic}</li>))
 
     return (
         <div className={"container mt-4"}>
             <form className={"form-control"} onSubmit={submitHandler}>
                 <label htmlFor="title" className={"form-label mt-2"}>Title</label>
-                <input type="text" placeholder={"Enter Title"}  id={"title"} className={"form-control"}
-                       onChange={titleChangeHandler} onBlur={titleErrorFocusHandler}/>
+                <input type="text" placeholder={"Enter Title"} id={"title"} className={"form-control"}
+                       onChange={titleChangeHandler} onBlur={titleErrorFocusHandler} value={title}/>
                 {
                     titleError && (
                         <div>
@@ -111,8 +115,9 @@ const AgendaAdd = (props) => {
 
 
                 <label htmlFor="desc" className={"form-label mt-2"}>Description</label>
-                <input type="text" placeholder={"Enter Description"}  id={"desc"}
-                       className={"form-control"} onChange={descChangeHandler} onBlur={descErrorFocusHandler}/>
+                <input type="text" placeholder={"Enter Description"} id={"desc"}
+                       className={"form-control"} onChange={descChangeHandler} onBlur={descErrorFocusHandler}
+                       value={desc}/>
 
                 {
                     descError && (
@@ -123,8 +128,9 @@ const AgendaAdd = (props) => {
                 }
                 <label htmlFor="Topic" className={"form-label mt-2"}>Topic</label>
                 <div className="input-group mb-3">
-                    <input type="text" placeholder={"Enter Topics"}  id={"Topic"}
-                           className={"form-control"} onChange={topicChangeHandler} onBlur={topicErrorFocusHandler}/>
+                    <input type="text" placeholder={"Enter Topics"} id={"Topic"}
+                           className={"form-control"} onChange={topicChangeHandler} onBlur={topicErrorFocusHandler}
+                           value={topic}/>
 
                     <button className={"btn  btn-primary  "} onClick={addTopicHandler}
                             disabled={btnDisable} type={"button"} id="button-addon1">Add topic
